@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y-S</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <h1><span class="youtube">Y</span>-<span class="spotify">S</span></h1>
+        </div>
+        <div>
+            <ul class="nav-list">
+                <li><a href="{{ url_for('spotify.know_more') }}" class="nav-link">Know More</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6 flex flex-col items-center justify-center min-h-screen">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash mb-4">
+            {% for category, message in messages %}
+            <div
+                class=" flash p-4 mb-4 text-sm text-white {{ 'bg-red-500' if category == 'error' else 'bg-green-500' }} rounded-lg">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <h1 class="text-3xl font-bold mb-6 text-center">
+            Transfer your <span class="youtube">Y</span>ouTube playlist to <span class="spotify">S</span>potify
+        </h1>
+        <form action="{{ url_for('spotify.transfer') }}" method="POST" class="form-container">
+            <label for="youtube_playlist_url" class="form-label">YouTube Playlist URL:</label>
+            <input type="text" id="youtube_playlist_url" name="youtube_playlist_url" required class="form-input"
+                placeholder="URL">
+            <button type="submit" class="form-button">Transfer to Spotify</button>
+        </form>
+        <a href="{{ url_for('auth.login_spotify') }}" class="login-link">Login to Spotify</a>
+    </div>
+
+</body>
+
+</html>
