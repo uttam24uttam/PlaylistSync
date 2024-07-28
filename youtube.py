@@ -1,11 +1,16 @@
 import requests
-from config import YOUTUBE_API_KEY
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
 def fetch_youtube_playlist(url):
     playlist_id = extract_playlist_id(url)
     youtube_api_url = f'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={playlist_id}&key={YOUTUBE_API_KEY}&maxResults=50'
     playlist_info_url = f'https://www.googleapis.com/youtube/v3/playlists?part=snippet&id={playlist_id}&key={YOUTUBE_API_KEY}'
-    
+
     response = requests.get(youtube_api_url).json()
     playlist_info_response = requests.get(playlist_info_url).json()
 
@@ -38,7 +43,7 @@ def find_spotify_track_id(video_title):
     token_info = session.get('token_info', None)
     if not token_info:
         return None
-    
+
     sp = Spotify(auth=token_info['access_token'])
     results = sp.search(q=video_title, limit=1)
     if results['tracks']['items']:
