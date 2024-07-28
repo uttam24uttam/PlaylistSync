@@ -1,8 +1,16 @@
 from flask import Blueprint, redirect, request, session, url_for, render_template
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
+from dotenv import load_dotenv
+import os
 import time
-from config import SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SCOPE
+
+load_dotenv()
+
+SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
+SPOTIPY_CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
+SPOTIPY_REDIRECT_URI = os.getenv('SPOTIPY_REDIRECT_URI')
+SCOPE = os.getenv('SCOPE')
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -39,3 +47,4 @@ def get_token():
     if is_token_expired:
         token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
     return token_info
+
